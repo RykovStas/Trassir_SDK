@@ -39,12 +39,14 @@ transactions = f"https://10.79.3.10:8080/pos_events?password={password}"
 sheet.append(['Reciept No.', 'POS Terminal', 'Price'])
 existing_data = []
 if os.path.exists('data.xlsx'):
-    existing_workbook = load_workbook('data.xlsx')
+    existing_workbook = load_workbook('data.xlsx', read_only=True)
     existing_sheet = existing_workbook.active
 
     # Validation of data
     for row in existing_sheet.iter_rows(values_only=True):
         existing_data.append(row)
+
+    existing_workbook.close()
 
 while True:
     transaction = requests.get(transactions, headers=headers, verify=False, timeout=5)
@@ -79,5 +81,6 @@ while True:
                 existing_data.append((value1, value2, value3))
 
         workbook.save('data.xlsx')
+        workbook.close()
 
     time.sleep(60)
