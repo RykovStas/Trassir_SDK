@@ -38,6 +38,8 @@ def find_dict(lst, key, value):
 transactions = f"https://10.79.3.10:8080/pos_events?password={password}"
 sheet.append(['Reciept No.', 'POS Terminal', 'Price'])
 existing_data = []
+receipt_counter = 0  # Counter for receipts within an hour
+price_total = 0  # Total price within an hour
 if os.path.exists('data.xlsx'):
     existing_workbook = load_workbook('data.xlsx', read_only=True)
     existing_sheet = existing_workbook.active
@@ -80,7 +82,21 @@ while True:
                 sheet.append([value1, value2, value3])
                 existing_data.append((value1, value2, value3))
 
+                receipt_counter += 1
+                price_total += float(value3)
+
         workbook.save('data.xlsx')
         workbook.close()
 
-    time.sleep(60)
+        if time.localtime().tm_min == 0:  # Every hour
+
+            sheet.append(['Summary', receipt_counter, price_total])
+
+            workbook.save('data.xlsx')
+            workbook.close()
+
+            # Reset counters
+            receipt_counter = 0
+            price_total = 0
+
+        time.sleep(60)
