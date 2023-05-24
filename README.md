@@ -14,4 +14,5 @@
 ## _FINISH_:
 ###  As a result, we get an xlsx file with data on transactions in the directory (Number of transactions from 10-11, 11-12, etc., the amount of transactions in these intervals)
 ![img.png](media/data.png)
+![dir.png](media/dir.png)
 ----
